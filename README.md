@@ -107,7 +107,11 @@ sign_up: DateTime, When did this user sign up?
     * Create database
     * Create Tables
         -   Sequelize Models
-            -   Model Associations
+            - ~~users~~
+            - ~~photos~~
+            - comments
+            - likes
+             *   Model Associations
 
 > Tests
     * To be created for each route handler
