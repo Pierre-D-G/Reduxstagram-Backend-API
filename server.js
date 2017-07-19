@@ -3,6 +3,9 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
+const db = require('./server/index').db;
+
+db();
 
 require('dotenv').config();
 
@@ -27,7 +30,6 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
-
 
 app.get('*', (req, res) => {
   res.status(200).send({message: "Welcome to the Reduxstagram API"})
