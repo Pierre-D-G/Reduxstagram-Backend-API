@@ -4,8 +4,10 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const db = require('./server/index').db;
+// const UserTest = require('./server/tests_db/userDb').UserTest; 
 
 db();
+// UserTest();
 
 require('dotenv').config();
 

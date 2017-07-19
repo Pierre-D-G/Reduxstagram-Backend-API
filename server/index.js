@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
+const UserTest = require('./tests_db/inserts').UserTest;
 
 require('dotenv').config();
-
 db = () => {
-    console.log(process.env.DB_USER)
     const sequelize = new Sequelize(process.env.DB, process.env.DB_USER, process.env.DB_PASS, {
         host: process.env.DB_HOST,
         dialect: 'postgres',
@@ -22,6 +21,11 @@ db = () => {
         .catch(err => {
             console.error('Unable to establish connection to the database', err)
         });
+
+        sequelize.sync().then(() => {
+            UserTest();
+        })
+       
 }
 
 
