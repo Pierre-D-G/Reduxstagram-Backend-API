@@ -57,7 +57,7 @@ Database used - [PostgreSQL v9.6](https://www.postgresql.org/)
 
 photo_id: Integer, Primary ID that  auto increments
 
-user_id: Integer, ID of the user who owns this photo (Indexed field)
+user_id: UUID, ID of the user who owns this photo (Indexed field)
 
 caption: String, Photo caption
 
@@ -79,7 +79,7 @@ comment_id: Integer, ID of the comment being assigned to a photo
 
 ### Table: Likes
 
-user_id: Integer, ID of the user performing the like (Indexed field)
+user_id: UUID, ID of the user performing the like (Indexed field)
 
 photo_id: Integer, ID of the photo being liked (Indexed field)
 
