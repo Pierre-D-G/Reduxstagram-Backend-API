@@ -63,9 +63,7 @@ caption: String, Photo caption
 
 image_path: String, Path to image
 
-date_created: DateTime, When was this image created?
-
-date_updated: DateTime, Last time this image was updated?
+date_created: DateTime, When was this image uploaded?
 
 ### Table: comments
 
@@ -87,7 +85,7 @@ photo_id: Integer, ID of the photo being liked (Indexed field)
 
 ### Table: Users
 
-user_id: Integer, Primary ID that preferably auto increments
+user_id: UUID, Primary ID 
 
 username: String, Username (Unique Index)
 
@@ -95,13 +93,13 @@ email: String, Email address (Unique Index)
 
 salted_password: String, Salted password
 
+bio: Text, user bio
+
 first_name: String, First name of user
 
 last_name: String, Last name of user
 
-date_created: DateTime, When did this user sign up?
-
-date_updated: DateTime, Last time this user was updated?
+sign_up: DateTime, When did this user sign up?
 
 ## Development Path
 
