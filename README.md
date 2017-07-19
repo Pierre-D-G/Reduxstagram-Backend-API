@@ -71,11 +71,9 @@ comment_id: Integer, Primary ID that  auto increments
 
 comment: Text, a text field containing the comment
 
-Table photos_comments
-
 photo_id: Integer, ID of the photo
 
-comment_id: Integer, ID of the comment being assigned to a photo
+username: string, user comments belongs to
 
 ### Table: Likes
 
