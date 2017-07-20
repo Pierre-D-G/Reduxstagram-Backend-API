@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('comments', {
+    let Comments = sequelize.define('comments', {
         comment_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -19,5 +19,22 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             allowNull: false
         }
-    })
+    });
+
+    Comments.associate = (models) => {
+        Comments.belongsTo(models.user, {
+          onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: false
+          }
+        }),
+        Comments.belongsTo(models.photos, {
+          onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: false
+          }
+        })
+    }
+
+    return Comments;
 }
