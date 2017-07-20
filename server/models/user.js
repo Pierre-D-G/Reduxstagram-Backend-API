@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('user', {
+    let User = sequelize.define('users', {
         user_id: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -51,4 +51,12 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: Sequelize.NOW
         }
     });
+
+    User.associate = (models) => {
+        User.hasMany(models.photos);
+        User.hasMany(models.comments);
+        User.hasMany(models.likes);
+    }
+
+    return User;
 }
