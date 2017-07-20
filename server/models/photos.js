@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('photos', {
+    let Photos = sequelize.define('photos', {
         photo_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -23,5 +23,27 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.DATEONLY,
             defaultValue: Sequelize.NOW
         }
-    })
+    });
+
+    Photos.associate = (models) => {
+        Photos.belongsTo(models.user, {
+            onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: false
+          }
+        }),
+        Photos.hasMany(models.comments, {
+          onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: false
+          }
+        }),
+        Photos.hasMany(models.likes, {
+          onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: false
+          }
+        })
+
+    }
 }
