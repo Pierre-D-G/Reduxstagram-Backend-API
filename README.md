@@ -77,7 +77,7 @@ username: string, user comments belongs to
 
 ### Table: Likes
 
-user_id: UUID, ID of the user performing the like (Indexed field)
+username: String, user performing the like (Indexed field)
 
 photo_id: Integer, ID of the photo being liked (Indexed field)
 
