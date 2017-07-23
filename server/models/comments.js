@@ -1,27 +1,28 @@
-const Sequelize = require('sequelize');
+"use strict";
 
-module.exports = (sequelize, DataTypes) => {
-    let Comments = sequelize.define('comments', {
+
+module.exports = function(sequelize, DataTypes){
+    const Comments = sequelize.define('comments', {
         comment_id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrements: true
         },
         photo_id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         comment: {
-            type: Sequelize.TEXT,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         username: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         }
     });
 
-    Comments.associate = (models) => {
+    Comments.associate = function(models){
         Comments.belongsTo(models.user, {
           onDelete: "CASCADE",
           foreignKey: {
@@ -33,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: {
             allowNull: false
           }
-        })
+        });
     }
 
     return Comments;

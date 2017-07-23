@@ -1,21 +1,16 @@
 const express = require('express');
 const path = require('path');
-const http = require('http');
+const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const db = require('./server/index').db;
-// const UserTest = require('./server/tests_db/userDb').UserTest; 
-
-db();
-// UserTest();
-
 require('dotenv').config();
 
 // Get our API routes
 
 const app = express();
 
-
+app.use(logger('dev'));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -36,17 +31,5 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.get('*', (req, res) => {
   res.status(200).send({message: "Welcome to the Reduxstagram API"})
 });
-
-/**
- * Get port from environment and store in Express.
- */
-const port = process.env.PORT || '3000';
-app.set('port', port);
-
-
-const server = http.createServer(app);
-
-
-server.listen(port, () => console.log(`API running on localhost:${port}`));
 
 module.exports = app 

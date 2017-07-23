@@ -1,13 +1,13 @@
-const Sequelize = require('sequelize');
+"use strict";
 
 module.exports = (sequelize, DataTypes) => {
-    let Likes = sequelize.define('likes', {
+    const Likes = sequelize.define('likes', {
         photo_id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         username: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         }
     });
@@ -27,4 +27,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         })
     }
-}
+
+    return Likes;
+};
