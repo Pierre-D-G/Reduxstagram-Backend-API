@@ -2,14 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Likes = sequelize.define('likes', {
-        photo_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false
-        }
     });
 
     Likes.associate = (models) => {
