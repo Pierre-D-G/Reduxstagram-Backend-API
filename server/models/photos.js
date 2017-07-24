@@ -2,10 +2,10 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     let Photos = sequelize.define('photos', {
-        photo_id: {
+        photoId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            autoIncrements: true
+            autoIncrement: true
         },
         caption: {
             type: Sequelize.STRING,
