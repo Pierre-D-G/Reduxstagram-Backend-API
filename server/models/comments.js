@@ -16,16 +16,12 @@ module.exports = function(sequelize, DataTypes){
 
     Comments.associate = function(models){
         Comments.belongsTo(models.user, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'userId',
+            onDelete: 'CASCADE'
         }),
         Comments.belongsTo(models.photos, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+            onDelete: 'CASCADE'
         });
     }
 

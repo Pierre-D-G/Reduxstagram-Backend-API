@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     let User = sequelize.define('user', {
-        user_id: {
+        userId: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,
             primaryKey: true
@@ -53,9 +53,18 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     User.associate = (models) => {
-        User.hasMany(models.photos);
-        User.hasMany(models.comments);
-        User.hasMany(models.likes);
+        User.hasMany(models.photos, {
+            foreignKey: 'userId',
+            as: 'photos',
+          });
+        User.hasMany(models.comments, {
+            foreignKey: 'userId',
+            as: 'comments',
+          });
+        User.hasMany(models.likes, {
+            foreignKey: 'userId',
+            as: 'likes',
+          });
     }
 
     return User;

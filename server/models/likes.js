@@ -6,17 +6,13 @@ module.exports = (sequelize, DataTypes) => {
 
     Likes.associate = (models) => {
         Likes.belongsTo(models.user, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'userId',
+            onDelete: 'CASCADE'
         })
 
         Likes.belongsTo(models.photos, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+            onDelete: 'CASCADE'
         })
     }
 

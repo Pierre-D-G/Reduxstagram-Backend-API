@@ -23,22 +23,16 @@ module.exports = (sequelize, DataTypes) => {
 
     Photos.associate = (models) => {
         Photos.belongsTo(models.user, {
-            onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+            foreignKey: 'userId',
+            onDelete: 'CASCADE'
         }),
         Photos.hasMany(models.comments, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+          as: 'comments'
         }),
         Photos.hasMany(models.likes, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+          as: 'likes'
         })
 
     }
