@@ -7,8 +7,8 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "dev": "nodemon server.js --watch server",
-    "test-unit": "mocha ./server/test/unit/*.js --timeout 10000",
-    "test-integration": "mocha ./server/test/integration/*.js --timeout 10000"
+    "test-unit": "mocha ./server/tests/unit/*.js --timeout 10000",
+    "test-integration": "mocha ./server/tests/integration/*.js --timeout 10000"
   },
   "keywords": [],
   "author": "Pierre-D-G",
