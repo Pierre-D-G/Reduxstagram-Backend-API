@@ -10,7 +10,7 @@ An API created to clone a portion of Instagram's backend.
 ### Built With
 
 
-* Node v6.10.0
+* Node v8.2.1
 * Express v4.15.3
 * PostgreSQL v9.6
 * Sequelize v4.2.1 as ORM
@@ -55,9 +55,9 @@ Database used - [PostgreSQL v9.6](https://www.postgresql.org/)
 
 ### Table: photos
 
-photo_id: Integer, Primary ID that  auto increments
+photoId: Integer, Primary ID that  auto increments
 
-user_id: UUID, ID of the user who owns this photo (Indexed field)
+userId: UUID, ID of the user who owns this photo (Indexed field)
 
 caption: String, Photo caption
 
@@ -67,19 +67,17 @@ date_created: DateTime, When was this image uploaded?
 
 ### Table: comments
 
-comment_id: Integer, Primary ID that  auto increments
-
 comment: Text, a text field containing the comment
 
-photo_id: Integer, ID of the photo
+photoId: Integer, ID of the photo
 
-username: string, user comments belongs to
+userId: UUID, ID of user who commented
 
 ### Table: Likes
 
-username: String, user performing the like (Indexed field)
+userId: UUID, ID of user who liked (Indexed field)
 
-photo_id: Integer, ID of the photo being liked (Indexed field)
+photoId: Integer, ID of the photo being liked (Indexed field)
 
 ### Table: Users
 
@@ -107,13 +105,13 @@ sign_up: DateTime, When did this user sign up?
         -   Sequelize Models
             - ~~users~~
             - ~~photos~~
-            - comments
-            - likes
-             *   Model Associations
+            - ~~comments~~
+            - ~~likes~~
+             *   ~~Model Associations~~
 
 > Tests
     * To be created for each route handler
-
+    * To be created for database Input/Output
 > Route Handlers
     * Authentication
         * Login
