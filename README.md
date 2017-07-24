@@ -100,6 +100,7 @@ sign_up: DateTime, When did this user sign up?
 ## Development Path
 
 > Database
+
     * Create database
     * Create Tables
         -   Sequelize Models
@@ -110,9 +111,12 @@ sign_up: DateTime, When did this user sign up?
              *   ~~Model Associations~~
 
 > Tests
+
     * To be created for each route handler
     * To be created for database Input/Output
+
 > Route Handlers
+
     * Authentication
         * Login
         * Logout
