@@ -122,4 +122,33 @@ describe('Database Tests', () => {
     /**
      *  ================== END OF INSERT COMMENT TEST ========================
      */
+    /**
+     * Insert Like into the database
+     */
+
+    describe('Insert a like', () => {
+        it('it should insert a like into the database', (done) => {
+            const Photo = models.photos;
+            const User = models.user;
+            const Likes = models.likes
+            User.create(newUser).then(() => {
+                Photo.create(newPhoto).then(() => {
+                    Likes.create({
+                        userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+                        photoId: '1'
+                    }, {
+                            returning: true,
+                            plain: true,
+                            raw: true
+                        }).then(like => {
+                            let newLike = like.dataValues;
+                            expect(newLike).to.be.a('object');
+                            expect(newLike).to.have.property('photoId').equal(1);
+                            expect(newLike).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                            done();
+                        })
+                })
+            })
+        })
+    })
 })
