@@ -2,14 +2,10 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     let Photos = sequelize.define('photos', {
-        photo_id: {
+        photoId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            autoIncrements: true
-        },
-        user_id: {
-            type: Sequelize.UUID,
-            allowNull: false
+            autoIncrement: true
         },
         caption: {
             type: Sequelize.STRING,
@@ -27,22 +23,16 @@ module.exports = (sequelize, DataTypes) => {
 
     Photos.associate = (models) => {
         Photos.belongsTo(models.user, {
-            onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+            foreignKey: 'userId',
+            onDelete: 'CASCADE'
         }),
         Photos.hasMany(models.comments, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+          as: 'comments'
         }),
         Photos.hasMany(models.likes, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
+          foreignKey: 'photoId',
+          as: 'likes'
         })
 
     }
