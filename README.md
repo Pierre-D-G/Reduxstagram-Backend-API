@@ -3,8 +3,6 @@
 
 An API created to clone a portion of Instagram's backend.
 
-## Test-Driven Development Philosophy
-
 ## Developing
 
 ### Built With
@@ -14,6 +12,7 @@ An API created to clone a portion of Instagram's backend.
 * Express v4.15.3
 * PostgreSQL v9.6
 * Sequelize v4.2.1 as ORM
+* Following test-driven development
 
 ### Prerequisites
 
@@ -33,16 +32,58 @@ npm install to install dependancies
 
 ## Tests
 
+* run `npm run test-integration` to run the integration tests which test database input/output
+
+* run `npm run test-unit` to run the units tests which test the API endpoints
+
 ### Test Suite
 
 * Mocha v2.4.5 as test runner
 * Chai v^3.5.0 as assertion library
 * Chai-http v^2.0.1 for making Http requests to api
 
-### Example Test
+### Example Unit Test
 
 ```shell
- Todo
+    todo
+```
+
+### Example Integration Test
+
+```shell
+
+let newUser = {
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    username: 'Testy',
+    password: 'pwtest',
+    email: 'test@gmail.com',
+    first_name: 'Testing',
+    last_name: 'Tester',
+    bio: 'I am an insert test'
+},
+
+ describe('Insert a user', () => {
+        it('it should insert the details of a user into the database and return it', (done) => {
+            const User = models.user;
+            User.create(newUser, {
+                returning: true,
+                raw: true,
+                plain: true
+            }).then(user => {
+                let createdUser = user.dataValues;
+                expect(createdUser).to.be.a('object');
+                expect(createdUser).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                expect(createdUser).to.have.property('sign_up');
+                expect(createdUser).to.have.property('username').equal('Testy');
+                expect(createdUser).to.have.property('password');
+                expect(createdUser).to.have.property('email').equal('test@gmail.com');
+                expect(createdUser).to.have.property('first_name').equal('Testing');
+                expect(createdUser).to.have.property('last_name').equal('Tester');
+                expect(createdUser).to.have.property('bio').equal('I am an insert test');
+                done();
+            })
+        })
+    });
 ```
 
 ## Api Reference
