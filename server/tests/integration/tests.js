@@ -12,6 +12,18 @@ let newUser = {
     bio: 'I am an insert test'
 }
 
+let newPhoto = {
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    caption: 'This the caption of a test photo',
+    image_path: 'https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e35/12552326_495932673919321_1443393332_n.jpg'
+}
+
+let newComment = {
+    comment: 'This is a test comment',
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    photoId: '1'
+}
+
 
 
 /** 
@@ -50,7 +62,9 @@ describe('Database Tests', () => {
             })
         })
     });
-
+    /**
+     *  ================== END OF INSERT USER TEST ========================
+     */
     /**
      * Insert a Photo
      */
@@ -59,24 +73,53 @@ describe('Database Tests', () => {
             const Photo = models.photos;
             const User = models.user;
             User.create(newUser).then(() => {
-                Photo.create({
-                    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
-                    caption: 'This the caption of a test photo',
-                    image_path: 'https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e35/12552326_495932673919321_1443393332_n.jpg'
-                }, {
-                        returning: true,
-                        plain: true,
-                        raw: true
-                    }).then(photo => {
-                        let newPhoto = photo.dataValues;
-                        expect(newPhoto).to.be.a('object');
-                        expect(newPhoto).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
-                        expect(newPhoto).to.have.property('image_path');
-                        expect(newPhoto).to.have.property('caption').equal('This the caption of a test photo');
-                        done();
-                    })
+                Photo.create(newPhoto, {
+                    returning: true,
+                    plain: true,
+                    raw: true
+                }).then(photo => {
+                    let createdPhoto = photo.dataValues;
+                    expect(createdPhoto).to.be.a('object');
+                    expect(createdPhoto).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                    expect(createdPhoto).to.have.property('image_path');
+                    expect(createdPhoto).to.have.property('caption').equal('This the caption of a test photo');
+                    done();
+                })
             })
 
         })
-    })
+    });
+    /**
+     *  ================== END OF INSERT PHOTO TEST ========================
+     */
+    /**
+     * Insert a comment
+     */
+    describe('Insert a comment', () => {
+        it('It should insert a comment into the database', (done) => {
+            const Photo = models.photos;
+            const User = models.user;
+            const Comments = models.comments;
+
+            User.create(newUser).then(() => {
+                Photo.create(newPhoto).then(() => {
+                    Comments.create(newComment, {
+                        returning: true,
+                        plain: true,
+                        raw: true
+                    }).then(comment => {
+                        let createdComment = comment.dataValues;
+                        expect(createdComment).to.be.a('object');
+                        expect(createdComment).to.have.property('comment').equal('This is a test comment');
+                        expect(createdComment).to.have.property('photoId').equal(1);
+                        expect(createdComment).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                        done();
+                    })
+                })
+            })
+        })
+    });
+    /**
+     *  ================== END OF INSERT COMMENT TEST ========================
+     */
 })
