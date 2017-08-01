@@ -6,6 +6,7 @@ const logger = require('morgan');
 require('dotenv').config();
 
 // Get our API routes
+const user = require('./server/controllers/user');
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
+
+app.post('/api/register', user.create);
 
 app.get('*', (req, res) => {
   res.status(200).send({message: "Welcome to the Reduxstagram API"})
