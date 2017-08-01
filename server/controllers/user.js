@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 const User = require('../models/').user;
 
@@ -47,8 +48,16 @@ module.exports = {
                 last_name: last_name,
                 bio: bio
             });
-            return res.status(200).send({
-                message: 'Successfully Registered'
+            return req.login(user, err => {
+                if (!err) {
+                    return res.status(200).send({
+                        message: 'Successfully Registered'
+                    });
+                }
+
+                return res.status(500).send({
+                    message: 'Auth error',
+                });
             });
 
         } catch (err) {
