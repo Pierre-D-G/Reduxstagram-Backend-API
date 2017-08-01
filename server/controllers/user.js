@@ -15,7 +15,6 @@ module.exports = {
         const first_name = req.body.first_name;
         const last_name = req.body.last_name;
         const bio = req.body.bio;
-        console.log(req.body);
 
         if (
             isEmptyOrNull(username) ||
