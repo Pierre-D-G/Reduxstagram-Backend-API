@@ -41,6 +41,29 @@ module.exports = {
 
         try {
 
+            const emailVerify = await User.findOne({
+                where: {
+                    email: email
+                },
+            })
+
+            if (emailVerify) {
+                return res.status(500).send({
+                    message: "This email address is already in use"
+                })
+            };
+
+            const usernameVerify = await User.findOne({
+                where: {
+                    username: username
+                },
+            })
+
+            if (usernameVerify) {
+                return res.status(500).send({
+                    message: "This username is already in use"
+                })
+            };
             const user = await User.create({
                 username: username,
                 password: hash,
@@ -77,7 +100,7 @@ module.exports = {
             };
 
             if (!user) {
-               return res.status(404).send({
+                return res.status(404).send({
                     message: 'User not found',
                 });
             };
@@ -93,9 +116,9 @@ module.exports = {
     },
 
     logout(req, res) {
-    req.logout();
-    return res.status(200).send({
-      message: 'You are successfully logged out',
-    });
-  },
+        req.logout();
+        return res.status(200).send({
+            message: 'You are successfully logged out',
+        });
+    },
 }
