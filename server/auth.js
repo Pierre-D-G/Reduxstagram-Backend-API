@@ -4,9 +4,9 @@ const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 require('dotenv').config();
 
-const User = require('./models/user');
+const User = require('./models/').user;
 
-module.exports = auth = (app, passport) => {
+module.exports = (app, passport) => {
   const newExpressSession = expressSession({
     secret: process.env.SESSION_SECRET,
     resave: true,
@@ -42,7 +42,6 @@ module.exports = auth = (app, passport) => {
             message: 'Incorrect login credentials.',
           });
         }
-
         const hashed = bcrypt.compare(password, user.password);
         if (hashed) {
           return done(null, user);
@@ -74,7 +73,7 @@ module.exports = auth = (app, passport) => {
       });
 
       if (!user) {
-        return done(new Error('Wrong user id.'));
+        return done(new Error('Incorrect ID'));
       }
 
       return done(null, user);
