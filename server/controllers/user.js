@@ -40,6 +40,7 @@ module.exports = {
         const hash = bcrypt.hashSync(password, salt);
 
         try {
+
             const user = await User.create({
                 username: username,
                 password: hash,
@@ -90,4 +91,11 @@ module.exports = {
             });
         })(req, res);
     },
+
+    logout(req, res) {
+    req.logout();
+    return res.status(200).send({
+      message: 'You are successfully logged out',
+    });
+  },
 }

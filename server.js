@@ -28,6 +28,7 @@ const user = require('./server/controllers/user');
 
 app.post('/api/register', user.create);
 app.post('/api/login', user.login);
+app.post('/api/logout', user.logout)
 
 app.get('*', (req, res) => {
   res.status(200).send({message: "Welcome to the Reduxstagram API"})

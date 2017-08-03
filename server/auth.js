@@ -64,8 +64,9 @@ module.exports = (app, passport) => {
     return done(null, user.userId);
   });
 
-  passport.deserializeUser(async (userId, done) => {
+  passport.deserializeUser(async (req, userId, done) => {
     try {
+      req.session.destroy();
       const user = await User.findOne({
         where: {
           userId: userId,
