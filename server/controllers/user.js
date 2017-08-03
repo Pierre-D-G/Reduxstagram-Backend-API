@@ -56,7 +56,7 @@ module.exports = {
                 }
 
                 return res.status(500).send({
-                    message: 'Auth error',
+                    message: 'Unable to Register',
                 });
             });
 
@@ -65,5 +65,29 @@ module.exports = {
                 message: "Unable to Register"
             }, err);
         }
-    }
+    },
+
+    login(req, res) {
+        return passport.authenticate('local', (err, user, info) => {
+            if (err) {
+                return res.status(500).send({
+                    message: 'Authentication failed, please try again',
+                });
+            };
+
+            if (!user) {
+               return res.status(404).send({
+                    message: 'User not found',
+                });
+            };
+            req.login(user, err => {
+                if (err) {
+                    return res.status(500).send(err);
+                }
+                return res.status(200).send({
+                    message: 'Login Successful'
+                })
+            });
+        })(req, res);
+    },
 }
