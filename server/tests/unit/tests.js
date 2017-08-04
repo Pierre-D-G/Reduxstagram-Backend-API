@@ -51,7 +51,7 @@ let dupeUsername = {
 
 // Register a user
 
-describe('Not register when a field is empty', () => {
+describe('Not register when a field is empty: ', () => {
     it('it should not register a user if the username/passwords/email/names fields are empty', (done) => {
         let emptyUser = {
             username: "Redux",
@@ -75,7 +75,7 @@ describe('Not register when a field is empty', () => {
     });
 });
 
-describe('Not register when passwords dont match', () => {
+describe('Not register when passwords dont match: ', () => {
     it('it should not register a user if the password fields dont match', (done) => {
         let emptyUser = {
             username: 'Redux',
@@ -99,7 +99,7 @@ describe('Not register when passwords dont match', () => {
     });
 });
 
-describe('Register user', () => {
+describe('Register user: ', () => {
     before((done) => {
         sequelize.sync({ force: true });
         done();
@@ -124,7 +124,7 @@ describe('Register user', () => {
     });
 });
 
-describe('Not register a user if email or username is in use', () => {
+describe('Not register a user if email or username is in use: ', () => {
     beforeEach((done) => {
         chai.request('http://localhost:3000')
             .post('/api/register')
@@ -169,12 +169,20 @@ describe('Not register a user if email or username is in use', () => {
 
 // Login and Logout
 
-describe('Login User', () => {
+describe('Login User: ', () => {
     it('it should login a user if the correct credentials are sent', (done) => {
         before((done) => {
             chai.request('http://localhost:3000')
                 .post('/api/register')
                 .send(newUser)
+                .end((err) => {
+                    done();
+                })
+        });
+        
+        after((done) => {
+            chai.request('http://localhost:3000')
+                .post('/api/logout')
                 .end((err) => {
                     done();
                 })
@@ -196,9 +204,21 @@ describe('Login User', () => {
     });
 });
 
-describe('Dont Login User', () => {
+describe('Dont Login User: ', () => {
     it('it should not login a user if incorrect credentials are sent', (done) => {
-
+         chai.request('http://localhost:3000')
+            .post('/api/login')
+            .send({
+                username: 'React',
+                password: '1234567'
+            })
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('User not found')
+                done();
+            })
     });
 });
 
