@@ -165,7 +165,48 @@ describe('Not register a user if email or username is in use', () => {
                 done();
             })
     })
-})
+});
+
+// Login and Logout
+
+describe('Login User', () => {
+    it('it should login a user if the correct credentials are sent', (done) => {
+        before((done) => {
+            chai.request('http://localhost:3000')
+                .post('/api/register')
+                .send(newUser)
+                .end((err) => {
+                    done();
+                })
+        });
+
+        chai.request('http://localhost:3000')
+            .post('/api/login')
+            .send({
+                username: 'Redux',
+                password: '123456'
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('Login Successful')
+                done();
+            })
+    });
+});
+
+describe('Dont Login User', () => {
+    it('it should not login a user if incorrect credentials are sent', (done) => {
+
+    });
+});
+
+describe('Logout User', () => {
+    it('it should logout a user', (done) => {
+
+    });
+});
 
 
 
