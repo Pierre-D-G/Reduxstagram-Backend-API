@@ -179,7 +179,7 @@ describe('Login User: ', () => {
                     done();
                 })
         });
-        
+
         after((done) => {
             chai.request('http://localhost:3000')
                 .post('/api/logout')
@@ -206,7 +206,7 @@ describe('Login User: ', () => {
 
 describe('Dont Login User: ', () => {
     it('it should not login a user if incorrect credentials are sent', (done) => {
-         chai.request('http://localhost:3000')
+        chai.request('http://localhost:3000')
             .post('/api/login')
             .send({
                 username: 'React',
@@ -222,9 +222,34 @@ describe('Dont Login User: ', () => {
     });
 });
 
-describe('Logout User', () => {
+describe('Logout User: ', () => {
     it('it should logout a user', (done) => {
+        before((done) => {
+            chai.request('http://localhost:3000')
+                .post('/api/register')
+                .send(newUser).then(() => {
+                    chai.request('http://localhost:3000')
+                        .post('/api/login')
+                        .send({
+                            username: 'Redux',
+                            password: '123456'
+                        })
+                })
+                .end((err) => {
+                    done();
+                })
+        });
 
+
+        chai.request('http://localhost:3000')
+            .post('/api/logout')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('You are successfully logged out')
+                done();
+            })
     });
 });
 
