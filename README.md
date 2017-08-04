@@ -45,7 +45,69 @@ npm install to install dependancies
 ### Example Unit Test
 
 ```shell
-    todo
+    let newUser = {
+    username: "Redux",
+    password: '123456',
+    confirmPassword: '123456',
+    email: 'test@email.com',
+    first_name: 'React',
+    last_name: 'Reduxstagram',
+    bio: "testing"
+}
+
+let dupeUsername = {
+    username: "Redux",
+    password: '123456',
+    confirmPassword: '123456',
+    email: 'test@dupeusername.com',
+    first_name: 'React',
+    last_name: 'Reduxstagram',
+    bio: "testing"
+}
+
+describe('Not register a user if email or username is in use: ', () => {
+    beforeEach((done) => {
+        chai.request('http://localhost:3000')
+            .post('/api/register')
+            .send(newUser)
+            .end((err) => {
+                done();
+            })
+    });
+
+    afterEach((done) => {
+        sequelize.sync({ force: true }).then(() => {
+            done();
+        });
+    });
+
+    it('it should not register a user if the requested email address is already in use', (done) => {
+        chai.request('http://localhost:3000')
+            .post('/api/register')
+            .send(newUser)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('This email address is already in use')
+                done();
+            })
+    })
+
+    it('it should not register a user if the requested username is already in use', (done) => {
+        chai.request('http://localhost:3000')
+            .post('/api/register')
+            .send(dupeUsername)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('This username is already in use')
+                done();
+            })
+    })
+});
+
 ```
 
 ### Example Integration Test
