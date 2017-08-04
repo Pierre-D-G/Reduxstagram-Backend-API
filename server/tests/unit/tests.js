@@ -47,6 +47,8 @@ let dupeUsername = {
     last_name: 'Reduxstagram',
     bio: "testing"
 }
+
+
 // Register a user
 
 describe('Not register when a field is empty', () => {
@@ -60,7 +62,7 @@ describe('Not register when a field is empty', () => {
             last_name: '',
             bio: "testing"
         }
-        chai.request(server)
+        chai.request('http://localhost:3000')
             .post('/api/register')
             .send(emptyUser)
             .end((err, res) => {
@@ -69,8 +71,8 @@ describe('Not register when a field is empty', () => {
                 res.body.should.have.property('message');
                 res.body.should.have.property('message').eql('Please fill out all fields')
                 done();
-            })
-    })
+            });
+    });
 });
 
 describe('Not register when passwords dont match', () => {
@@ -79,12 +81,12 @@ describe('Not register when passwords dont match', () => {
             username: 'Redux',
             password: '123456',
             confirmPassword: '12345',
-            email: 'test@email.com',
+            email: 'test@passwords.com',
             first_name: 'React',
             last_name: 'Reduxstagram',
             bio: "testing"
-        }
-        chai.request(server)
+        };
+        chai.request('http://localhost:3000')
             .post('/api/register')
             .send(emptyUser)
             .end((err, res) => {
@@ -93,13 +95,38 @@ describe('Not register when passwords dont match', () => {
                 res.body.should.have.property('message');
                 res.body.should.have.property('message').eql('Passwords do not match')
                 done();
-            })
-    })
+            });
+    });
+});
+
+describe('Register user', () => {
+    before((done) => {
+        sequelize.sync({ force: true });
+        done();
+    });
+
+    after((done) => {
+        sequelize.sync({ force: true });
+        done();
+    });
+
+    it('it should register a user', (done) => {
+        chai.request('http://localhost:3000')
+            .post('/api/register')
+            .send(newUser)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('message');
+                res.body.should.have.property('message').eql('Successfully Registered')
+                done();
+            });
+    });
 });
 
 describe('Not register a user if email or username is in use', () => {
     beforeEach((done) => {
-        chai.request(server)
+        chai.request('http://localhost:3000')
             .post('/api/register')
             .send(newUser)
             .end((err) => {
@@ -108,13 +135,13 @@ describe('Not register a user if email or username is in use', () => {
     });
 
     afterEach((done) => {
-        sequelize.sync({force: true}).then(() => {
+        sequelize.sync({ force: true }).then(() => {
             done();
         });
-    })
+    });
 
-    it('it should not register a user if the requested email address is already in user', (done) => {
-        chai.request(server)
+    it('it should not register a user if the requested email address is already in use', (done) => {
+        chai.request('http://localhost:3000')
             .post('/api/register')
             .send(newUser)
             .end((err, res) => {
@@ -126,22 +153,20 @@ describe('Not register a user if email or username is in use', () => {
             })
     })
 
-    // it('it should not register a user if the requested username is already in use', (done) => {
-
-    // })
-})
-
-describe('Register user', () => {
-    it('it should register a user', (done) => {
-        chai.request(server)
+    it('it should not register a user if the requested username is already in use', (done) => {
+        chai.request('http://localhost:3000')
             .post('/api/register')
-            .send(newUser)
+            .send(dupeUsername)
             .end((err, res) => {
-                res.should.have.status(200);
+                res.should.have.status(500);
                 res.should.be.a('object');
                 res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('Successfully Registered')
+                res.body.should.have.property('message').eql('This username is already in use')
                 done();
             })
     })
-});
+})
+
+
+
+
