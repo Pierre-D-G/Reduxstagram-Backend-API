@@ -23,13 +23,14 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-models.sequelize.sync({force: true}).then(() => {
+models.sequelize.sync().then(() => {
   
 
   /**
    * Seed user table
    */
   require('../server/seeds/users.js')();
+  require('../server/seeds/photos.js')();
 
 
   /**
