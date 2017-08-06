@@ -10,6 +10,7 @@ const http = require('http');
 
 const models = require('../server/models');
 
+
 /**
  * Get port from environment and store in Express.
  */
@@ -23,6 +24,14 @@ app.set('port', port);
 
 const server = http.createServer(app);
 models.sequelize.sync({force: true}).then(() => {
+  
+
+  /**
+   * Seed user table
+   */
+  require('../server/seeds/users.js')();
+
+
   /**
  * Listen on provided port, on all network interfaces.
  */
