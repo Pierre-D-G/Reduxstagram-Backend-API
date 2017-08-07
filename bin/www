@@ -27,10 +27,11 @@ models.sequelize.sync().then(() => {
   
 
   /**
-   * Seed user table
+   * Seed Database
    */
-  require('../server/seeds/users.js')();
-  require('../server/seeds/photos.js')();
+  // require('../server/seeds/users.js')();
+  // require('../server/seeds/photos.js')();
+  // require('../server/seeds/comments.js')();
 
 
   /**
