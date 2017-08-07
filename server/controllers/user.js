@@ -89,7 +89,7 @@ module.exports = {
         } catch (err) {
             return res.status(500).send({
                 message: "Unable to Register"
-            }, err);
+            });
         }
     },
 
@@ -150,7 +150,7 @@ module.exports = {
             }
 
             return res.status(200).send(user)
-            
+
         } catch(err){
             return res.status(500).send(err)
         }

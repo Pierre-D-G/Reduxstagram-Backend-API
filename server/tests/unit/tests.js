@@ -254,8 +254,28 @@ describe('Logout User: ', () => {
 });
 
 describe('Get User Data: ', () => {
-    it('should get the data of a user give their user id', (done) => {
-        
+    before((done) => {
+        sequelize.sync({ force: true }).then(() => {
+            require('../../seeds/users')();
+            require('../../seeds/photos')();
+            require('../../seeds/comments')();
+            done();
+        })
+
+    })
+    it('should get the data of a user give their user id if they are registered', (done) => {
+        let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
+
+        chai.request('http://localhost:3000')
+            .get('/api/user/' + testId)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('userId').eql(testId);
+                res.body.should.have.property('photos');
+                res.body.should.have.property('comments');
+                done();
+            })
     })
 })
 
