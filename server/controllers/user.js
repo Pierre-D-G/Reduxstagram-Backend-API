@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 const User = require('../models/').user;
+const Photos = require('../models/').photos;
+const Comments = require ('../models/').comments;
 
 const isEmptyOrNull = string => {
     return !string || !string.trim();
@@ -121,4 +123,36 @@ module.exports = {
             message: 'You are successfully logged out',
         });
     },
+
+    async get(req, res){
+        try {
+            const user = await User.findById(req.params.userId, {
+                attributes: {
+                    exclude: ['password'],
+                },
+                include: [
+                    {
+                        model: Photos,
+                        as: 'photos'
+                    },
+                    {
+                        model: Comments,
+                        as: 'comments'
+                    }
+                ],
+                order: [['createdAt', 'DESC']],
+            });
+
+            if(!user){
+                return res.status(404).send({
+                    message: "User could not be found"
+                })
+            }
+
+            return res.status(200).send(user)
+            
+        } catch(err){
+            return res.status(500).send(err)
+        }
+    }
 }

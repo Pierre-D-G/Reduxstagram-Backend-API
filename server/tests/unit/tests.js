@@ -253,6 +253,10 @@ describe('Logout User: ', () => {
     });
 });
 
-
+describe('Get User Data: ', () => {
+    it('should get the data of a user give their user id', (done) => {
+        
+    })
+})
 
 
