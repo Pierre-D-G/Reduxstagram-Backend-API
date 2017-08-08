@@ -126,6 +126,7 @@ describe('Register user: ', () => {
 
 describe('Not register a user if email or username is in use: ', () => {
     beforeEach((done) => {
+        // Register a user before each test
         chai.request('http://localhost:3000')
             .post('/api/register')
             .send(newUser)
@@ -134,6 +135,10 @@ describe('Not register a user if email or username is in use: ', () => {
             })
     });
 
+    // Dropping the table after each test so that each test can be ran accurately
+    // If this isnt done then the second test below will fail because the email is already in use error
+    // will be sent instead of the username is already use error since the api checks if the email is already
+    // being used first
     afterEach((done) => {
         sequelize.sync({ force: true }).then(() => {
             done();
@@ -171,6 +176,7 @@ describe('Not register a user if email or username is in use: ', () => {
 
 describe('Login User: ', () => {
     it('it should login a user if the correct credentials are sent', (done) => {
+        // Registering a user before each test
         before((done) => {
             chai.request('http://localhost:3000')
                 .post('/api/register')
@@ -179,7 +185,7 @@ describe('Login User: ', () => {
                     done();
                 })
         });
-
+        // Logging out that registered user after each test
         after((done) => {
             chai.request('http://localhost:3000')
                 .post('/api/logout')
@@ -224,6 +230,7 @@ describe('Dont Login User: ', () => {
 
 describe('Logout User: ', () => {
     it('it should logout a user', (done) => {
+        // Registering the user then logging them in
         before((done) => {
             chai.request('http://localhost:3000')
                 .post('/api/register')
@@ -240,7 +247,7 @@ describe('Logout User: ', () => {
                 })
         });
 
-
+        // Logging out the user user registered and logged in before the test was ran
         chai.request('http://localhost:3000')
             .post('/api/logout')
             .end((err, res) => {
@@ -255,6 +262,7 @@ describe('Logout User: ', () => {
 
 describe('Get User Data: ', () => {
     before((done) => {
+        // Seeding database before test
         sequelize.sync({ force: true }).then(() => {
             require('../../seeds/users')();
             require('../../seeds/photos')();
@@ -264,8 +272,8 @@ describe('Get User Data: ', () => {
 
     })
     it('should get the data of a user give their user id if they are registered', (done) => {
+        // Getting the details of one of seeded users by passing in their userId
         let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
-
         chai.request('http://localhost:3000')
             .get('/api/user/' + testId)
             .end((err, res) => {
@@ -283,28 +291,57 @@ describe('Get User Data: ', () => {
  * PHOTOS TESTS
  */
 
- describe('Create a photo', () => {
-     it('It should add a new photo to the database', (done) => {
+describe('Create a photo', () => {
+    before((done) => {
+        // Before test seed database then log into one of the seeded user accounts
+        sequelize.sync({ force: true }).then(() => {
+            require('../../seeds/users')();
+            require('../../seeds/photos')();
+            require('../../seeds/comments')();
+        }).then(() => {
+            chai.request('http://localhost:3000')
+                .post('/api/login')
+                .send({
+                    "username": "Jenny",
+                    "password": "jenny"
+                }).end((err) => {
+                    done();
+                })
+        })
+    });
 
-     })
- });
+    after((done) => {
+        // After test is done, logout user
+        chai.request('http://localhost:3000')
+            .post('/api/logout')
+            .end((err) => {
+                done();
+            })
+    });
 
- describe('Get photo details', () => {
-     it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
-         
-     })
- });
+    it('It should add a new photo to the database', (done) => {
 
- describe('Update a photo', () => {
-     it('It should update the details of a photo', (done) => {
-         
-     })
- });
 
- describe('Delete a photo', () => {
-     it('It should delete a photo from the database', (done) => {
-         
-     })
- });
+
+    })
+});
+
+describe('Get photo details', () => {
+    it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
+
+    })
+});
+
+describe('Update a photo', () => {
+    it('It should update the details of a photo', (done) => {
+
+    })
+});
+
+describe('Delete a photo', () => {
+    it('It should delete a photo from the database', (done) => {
+
+    })
+});
 
 
