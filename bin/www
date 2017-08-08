@@ -29,9 +29,10 @@ models.sequelize.sync({force: true}).then(() => {
   /**
    * Seed Database
    */
-  // require('../server/seeds/users.js')();
-  // require('../server/seeds/photos.js')();
-  // require('../server/seeds/comments.js')();
+  require('../server/seeds/users.js')();
+  require('../server/seeds/photos.js')();
+  require('../server/seeds/comments.js')();
+  require('../server/seeds/likes.js')();
 
 
   /**
