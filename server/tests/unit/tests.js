@@ -279,4 +279,32 @@ describe('Get User Data: ', () => {
     })
 })
 
+/**
+ * PHOTOS TESTS
+ */
+
+ describe('Create a photo', () => {
+     it('It should add a new photo to the database', (done) => {
+
+     })
+ });
+
+ describe('Get photo details', () => {
+     it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
+         
+     })
+ });
+
+ describe('Update a photo', () => {
+     it('It should update the details of a photo', (done) => {
+         
+     })
+ });
+
+ describe('Delete a photo', () => {
+     it('It should delete a photo from the database', (done) => {
+         
+     })
+ });
+
 
