@@ -8,9 +8,39 @@ module.exports = {
         try {
             const photo = await Photos.create({
                 caption: req.body.caption,
-                image_url: req.body.image_url,
-                userId: req.user.userId
+                image_path: req.body.image_path,
+                userId: req.body.userId
             });
+            return res.status(200).send(photo)
+
+        } catch (err) {
+            return res.status(500).send(err)
+        }
+    },
+
+    async get(req, res) {
+        try {
+            const photo = await Photos.findById(req.params.photoId, {
+                include: [
+                    {
+                        model: Comments,
+                        as: 'comments',
+                        include: [
+                            {
+                                model: User,
+                                attributes: {
+                                    exclude: ['userId', 'first_name', 'last_name', 'email', 'bio', 'sign_up', 'password', 'bio']
+                                }
+                            }
+                        ]
+                    }
+                ]
+            });
+            if (!photo) {
+                return res.status(404).send({
+                    message: 'Photo could not be found'
+                })
+            }
 
             return res.status(200).send(photo)
 

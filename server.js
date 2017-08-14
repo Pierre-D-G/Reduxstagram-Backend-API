@@ -39,6 +39,7 @@ app.post('/api/logout', user.logout);
 app.get('/api/user/:userId', user.get);
 
 app.post('/api/photos', authMiddleware, photo.create)
+app.get('/api/photos/:photoId', photo.get)
 
 app.get('*', (req, res) => {
   res.status(200).send({ message: "Welcome to the Reduxstagram API" })
