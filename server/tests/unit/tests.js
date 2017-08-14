@@ -267,17 +267,6 @@ describe('Logout User: ', () => {
 });
 
 describe('Get User Data: ', () => {
-    // before((done) => {
-    //     // Seeding database before test
-    //     sequelize.sync().then(() => {
-    //         require('../../seeds/users')();
-    //         require('../../seeds/photos')();
-    //         require('../../seeds/comments')();
-    //         done();
-    //     })
-
-    // });
-
     it('should get the data of a user give their user id if they are registered', (done) => {
         // Getting the details of one of seeded users by passing in their userId
         let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
@@ -300,12 +289,6 @@ describe('Get User Data: ', () => {
 
 describe('Create a photo', () => {
     before((done) => {
-        // Before test seed database then log into one of the seeded user accounts
-        // sequelize.sync().then(() => {
-        //     require('../../seeds/users')();
-        //     require('../../seeds/photos')();
-        //     require('../../seeds/comments')();
-        // }).then(() => {
         authenticated
             .post('/api/login')
             .send({
@@ -314,17 +297,7 @@ describe('Create a photo', () => {
             }).end((err, res) => {
                 done();
             })
-    })
-    // });
-
-    // after((done) => {
-    //     // After test is done, logout user
-    //     authenticated
-    //         .post('/api/logout')
-    //         .end((err) => {
-    //             done();
-    //         })
-    // });
+    });
 
     it('It should add a new photo to the database', (done) => {
         authenticated
@@ -344,17 +317,6 @@ describe('Create a photo', () => {
 });
 
 describe('Get photo details', () => {
-    // before((done) => {
-    //     // Seeding database before test
-    //     sequelize.sync().then(() => {
-    //         require('../../seeds/users')();
-    //         require('../../seeds/photos')();
-    //         require('../../seeds/comments')();
-    //         done();
-    //     })
-
-    // });
-
     it('It should get the details of a photo such as comments,likes and the user who owns it', (done) => {
         let photoId = 1;
         chai.request('http://localhost:3000')
@@ -370,11 +332,11 @@ describe('Get photo details', () => {
     })
 });
 
-// describe('Update a photo', () => {
-//     it('It should update the details of a photo', (done) => {
+describe('Update a photo', () => {
+    it('It should update the details of a photo', (done) => {
 
-//     })
-// });
+    })
+});
 
 // describe('Delete a photo', () => {
 //     it('It should delete a photo from the database', (done) => {
