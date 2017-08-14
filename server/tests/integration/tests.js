@@ -364,10 +364,29 @@ describe('Update a photo', () => {
     })
 });
 
-// describe('Delete a photo', () => {
-//     it('It should delete a photo from the database', (done) => {
-
-//     })
-// });
+describe('Delete a photo', () => {
+    // Logging into one of the seeded user accounts
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
+                done();
+            })
+    });
+    it('It should delete a photo from the database', (done) => {
+        let photoId = 18;
+        authenticated
+            .delete('/api/photos/' + photoId)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('message').eql('Photo has been deleted');
+                done();
+            })
+    })
+});
 
 
