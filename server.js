@@ -19,10 +19,18 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 require('./server/auth')(app, passport);
 
-// Get our API routes
 const user = require('./server/controllers/user');
+const photo = require('./server/controllers/photos');
 
-// Set our api routes
+const authMiddleware = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    return res.status(403).send({
+      message: 'Not Authenticated',
+    });
+  }
+};
 
 app.post('/api/register', user.create);
 app.post('/api/login', user.login);
@@ -30,8 +38,13 @@ app.post('/api/logout', user.logout);
 
 app.get('/api/user/:userId', user.get);
 
+app.post('/api/photos', authMiddleware, photo.create);
+app.get('/api/photos/:photoId', photo.get);
+app.put('/api/photos/:photoId', authMiddleware, photo.update);
+app.delete('/api/photos/:photoId', authMiddleware, photo.delete);
+
 app.get('*', (req, res) => {
-  res.status(200).send({message: "Welcome to the Reduxstagram API"})
+  res.status(200).send({ message: "Welcome to the Reduxstagram API" })
 });
 
 module.exports = app 

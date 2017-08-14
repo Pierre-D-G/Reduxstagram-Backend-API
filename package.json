@@ -22,6 +22,7 @@
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
+    "form-data": "^2.2.0",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
@@ -35,6 +36,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "superagent": "^3.5.2",
+    "supertest": "^3.0.0"
   }
 }

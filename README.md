@@ -32,17 +32,18 @@ npm install to install dependancies
 
 ## Tests
 
-* run `npm run test-integration` to run the integration tests which test database input/output
+* run `npm run test-unit` to run the integration tests which test database input/output
 
-* run `npm run test-unit` to run the units tests which test the API endpoints
+* run `npm run test-integration` to run the units tests which test the API endpoints
 
 ### Test Suite
 
 * Mocha v2.4.5 as test runner
 * Chai v^3.5.0 as assertion library
 * Chai-http v^2.0.1 for making Http requests to api
+* Supertest  v^3.0.0 for making Http requests to routes which require authentication
 
-### Example Unit Test
+### Example Integration Test
 
 ```shell
     let newUser = {
@@ -110,7 +111,7 @@ describe('Not register a user if email or username is in use: ', () => {
 
 ```
 
-### Example Integration Test
+### Example Unit Test
 
 ```shell
 
@@ -220,28 +221,33 @@ sign_up: DateTime, When did this user sign up?
 
 > Route Handlers
 
-    * Authentication
-        * Login
-        * Logout
+    * ~Authentication~
+        * ~Login~
+        * ~Logout~
     
     * User
-        * Get a User's Own Data - for user profile
-        * Create a User - Sign Up
-        * Get User By Id
+        * ~Get a User's Own Data - for user profile~
+        * ~Create a User - Sign Up~
+        * ~Get User By Id~
 
     * Photos
-        * Get a User's Photos
-        * Upload a Photo
+        * ~Get a Photo by id~
+        * ~Upload a Photo~
+        * Update a photo
+        * Delete a photo
 
     * Comments
         * Create a Comment
         * Get a User's Comments
         * Get a Photo's Ccomments
+        * Update a comment
+        * Delete a comment
 
     * Likes
         * Create a Like
         * Get a User's Likes
         * Get a Photo's Likes
+        * delete a like
 
 ## Licensing
 

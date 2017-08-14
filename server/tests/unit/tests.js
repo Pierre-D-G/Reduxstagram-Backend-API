@@ -1,282 +1,154 @@
-const Sequelize = require("sequelize");
-require('dotenv').config();
+const models = require('../../models');
 
-const sequelize = new Sequelize(process.env.DB, process.env.DB_USER, process.env.DB_PASS, {
-    host: process.env.DB_HOST,
-    dialect: 'postgres',
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    },
-    logging: false
-});
-
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
-    });
-
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../../../bin/www');
-let should = chai.should();
-
-chai.use(chaiHttp);
+let expect = require('chai').expect;
 
 let newUser = {
-    username: "Redux",
-    password: '123456',
-    confirmPassword: '123456',
-    email: 'test@email.com',
-    first_name: 'React',
-    last_name: 'Reduxstagram',
-    bio: "testing"
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    username: 'Testy',
+    password: 'pwtest',
+    email: 'test@gmail.com',
+    first_name: 'Testing',
+    last_name: 'Tester',
+    bio: 'I am an insert test'
 }
 
-let dupeUsername = {
-    username: "Redux",
-    password: '123456',
-    confirmPassword: '123456',
-    email: 'test@dupeusername.com',
-    first_name: 'React',
-    last_name: 'Reduxstagram',
-    bio: "testing"
+let newPhoto = {
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    caption: 'This the caption of a test photo',
+    image_path: 'https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e35/12552326_495932673919321_1443393332_n.jpg'
+}
+
+let newComment = {
+    comment: 'This is a test comment',
+    userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+    photoId: '1'
 }
 
 
-// Register a user
 
-describe('Not register when a field is empty: ', () => {
-    it('it should not register a user if the username/passwords/email/names fields are empty', (done) => {
-        let emptyUser = {
-            username: "Redux",
-            password: '123456',
-            confirmPassword: '123456',
-            email: '',
-            first_name: 'React',
-            last_name: '',
-            bio: "testing"
-        }
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(emptyUser)
-            .end((err, res) => {
-                res.should.have.status(500);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('Please fill out all fields')
-                done();
-            });
-    });
-});
+/** 
+ * Database insert tests
+ */
 
-describe('Not register when passwords dont match: ', () => {
-    it('it should not register a user if the password fields dont match', (done) => {
-        let emptyUser = {
-            username: 'Redux',
-            password: '123456',
-            confirmPassword: '12345',
-            email: 'test@passwords.com',
-            first_name: 'React',
-            last_name: 'Reduxstagram',
-            bio: "testing"
-        };
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(emptyUser)
-            .end((err, res) => {
-                res.should.have.status(500);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('Passwords do not match')
-                done();
-            });
-    });
-});
-
-describe('Register user: ', () => {
-    before((done) => {
-        sequelize.sync({ force: true });
-        done();
-    });
-
-    after((done) => {
-        sequelize.sync({ force: true });
-        done();
-    });
-
-    it('it should register a user', (done) => {
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(newUser)
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('Successfully Registered')
-                done();
-            });
-    });
-});
-
-describe('Not register a user if email or username is in use: ', () => {
+describe('Database Tests', () => {
     beforeEach((done) => {
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(newUser)
-            .end((err) => {
-                done();
-            })
-    });
-
-    afterEach((done) => {
-        sequelize.sync({ force: true }).then(() => {
-            done();
-        });
-    });
-
-    it('it should not register a user if the requested email address is already in use', (done) => {
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(newUser)
-            .end((err, res) => {
-                res.should.have.status(500);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('This email address is already in use')
-                done();
-            })
-    })
-
-    it('it should not register a user if the requested username is already in use', (done) => {
-        chai.request('http://localhost:3000')
-            .post('/api/register')
-            .send(dupeUsername)
-            .end((err, res) => {
-                res.should.have.status(500);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('This username is already in use')
-                done();
-            })
-    })
-});
-
-// Login and Logout
-
-describe('Login User: ', () => {
-    it('it should login a user if the correct credentials are sent', (done) => {
-        before((done) => {
-            chai.request('http://localhost:3000')
-                .post('/api/register')
-                .send(newUser)
-                .end((err) => {
-                    done();
-                })
-        });
-
-        after((done) => {
-            chai.request('http://localhost:3000')
-                .post('/api/logout')
-                .end((err) => {
-                    done();
-                })
-        });
-
-        chai.request('http://localhost:3000')
-            .post('/api/login')
-            .send({
-                username: 'Redux',
-                password: '123456'
-            })
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('Login Successful')
-                done();
-            })
-    });
-});
-
-describe('Dont Login User: ', () => {
-    it('it should not login a user if incorrect credentials are sent', (done) => {
-        chai.request('http://localhost:3000')
-            .post('/api/login')
-            .send({
-                username: 'React',
-                password: '1234567'
-            })
-            .end((err, res) => {
-                res.should.have.status(404);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('User not found')
-                done();
-            })
-    });
-});
-
-describe('Logout User: ', () => {
-    it('it should logout a user', (done) => {
-        before((done) => {
-            chai.request('http://localhost:3000')
-                .post('/api/register')
-                .send(newUser).then(() => {
-                    chai.request('http://localhost:3000')
-                        .post('/api/login')
-                        .send({
-                            username: 'Redux',
-                            password: '123456'
-                        })
-                })
-                .end((err) => {
-                    done();
-                })
-        });
-
-
-        chai.request('http://localhost:3000')
-            .post('/api/logout')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.be.a('object');
-                res.body.should.have.property('message');
-                res.body.should.have.property('message').eql('You are successfully logged out')
-                done();
-            })
-    });
-});
-
-describe('Get User Data: ', () => {
-    before((done) => {
-        sequelize.sync({ force: true }).then(() => {
-            require('../../seeds/users')();
-            require('../../seeds/photos')();
-            require('../../seeds/comments')();
+        models.sequelize.sync({ force: true }).then(() => {
             done();
         })
+    });
 
-    })
-    it('should get the data of a user give their user id if they are registered', (done) => {
-        let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
-
-        chai.request('http://localhost:3000')
-            .get('/api/user/' + testId)
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.be.a('object');
-                res.body.should.have.property('userId').eql(testId);
-                res.body.should.have.property('photos');
-                res.body.should.have.property('comments');
+    /**
+     * Insert a user into database
+     */
+    describe('Insert a user', () => {
+        it('it should insert the details of a user into the database and return it', (done) => {
+            const User = models.user;
+            User.create(newUser, {
+                returning: true,
+                raw: true,
+                plain: true
+            }).then(user => {
+                let createdUser = user.dataValues;
+                expect(createdUser).to.be.a('object');
+                expect(createdUser).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                expect(createdUser).to.have.property('sign_up');
+                expect(createdUser).to.have.property('username').equal('Testy');
+                expect(createdUser).to.have.property('password');
+                expect(createdUser).to.have.property('email').equal('test@gmail.com');
+                expect(createdUser).to.have.property('first_name').equal('Testing');
+                expect(createdUser).to.have.property('last_name').equal('Tester');
+                expect(createdUser).to.have.property('bio').equal('I am an insert test');
                 done();
             })
+        })
+    });
+    /**
+     *  ================== END OF INSERT USER TEST ========================
+     */
+    /**
+     * Insert a Photo
+     */
+    describe('Insert photo', () => {
+        it('it should insert a photo into the database', (done) => {
+            const Photo = models.photos;
+            const User = models.user;
+            User.create(newUser).then(() => {
+                Photo.create(newPhoto, {
+                    returning: true,
+                    plain: true,
+                    raw: true
+                }).then(photo => {
+                    let createdPhoto = photo.dataValues;
+                    expect(createdPhoto).to.be.a('object');
+                    expect(createdPhoto).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                    expect(createdPhoto).to.have.property('image_path');
+                    expect(createdPhoto).to.have.property('caption').equal('This the caption of a test photo');
+                    done();
+                })
+            })
+
+        })
+    });
+    /**
+     *  ================== END OF INSERT PHOTO TEST ========================
+     */
+    /**
+     * Insert a comment
+     */
+    describe('Insert a comment', () => {
+        it('It should insert a comment into the database', (done) => {
+            const Photo = models.photos;
+            const User = models.user;
+            const Comments = models.comments;
+
+            User.create(newUser).then(() => {
+                Photo.create(newPhoto).then(() => {
+                    Comments.create(newComment, {
+                        returning: true,
+                        plain: true,
+                        raw: true
+                    }).then(comment => {
+                        let createdComment = comment.dataValues;
+                        expect(createdComment).to.be.a('object');
+                        expect(createdComment).to.have.property('comment').equal('This is a test comment');
+                        expect(createdComment).to.have.property('photoId').equal(1);
+                        expect(createdComment).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                        done();
+                    })
+                })
+            })
+        })
+    });
+    /**
+     *  ================== END OF INSERT COMMENT TEST ========================
+     */
+    /**
+     * Insert Like into the database
+     */
+
+    describe('Insert a like', () => {
+        it('it should insert a like into the database', (done) => {
+            const Photo = models.photos;
+            const User = models.user;
+            const Likes = models.likes
+            User.create(newUser).then(() => {
+                Photo.create(newPhoto).then(() => {
+                    Likes.create({
+                        userId: '3c207bbb-1e87-4a3f-8cc0-f757e4d5f643',
+                        photoId: '1'
+                    }, {
+                            returning: true,
+                            plain: true,
+                            raw: true
+                        }).then(like => {
+                            let newLike = like.dataValues;
+                            expect(newLike).to.be.a('object');
+                            expect(newLike).to.have.property('photoId').equal(1);
+                            expect(newLike).to.have.property('userId').equal('3c207bbb-1e87-4a3f-8cc0-f757e4d5f643');
+                            done();
+                        })
+                })
+            })
+        })
     })
 })
-
-
