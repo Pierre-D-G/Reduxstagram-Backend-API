@@ -21,12 +21,18 @@ sequelize
         console.error('Unable to connect to the database:', err);
     });
 
+
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../../../bin/www');
 let should = chai.should();
+let request = require('supertest');
+
 
 chai.use(chaiHttp);
+
+// Using supertest instead of chai for testing routes which require authentication
+const authenticated = request.agent(server);
 
 let newUser = {
     username: "Redux",
@@ -299,20 +305,21 @@ describe('Create a photo', () => {
             require('../../seeds/photos')();
             require('../../seeds/comments')();
         }).then(() => {
-            chai.request('http://localhost:3000')
-                .post('/api/login')
-                .send({
-                    "username": "Jenny",
-                    "password": "jenny"
-                }).end((err) => {
-                    done();
-                })
-        })
+                authenticated
+                    .post('/api/login')
+                    .send({
+                        username: "Jenny",
+                        password: "jenny"
+                    }).end((err, res) => {
+                        console.log(res.body.message)
+                        done();
+                    })
+            })
     });
 
     after((done) => {
         // After test is done, logout user
-        chai.request('http://localhost:3000')
+        authenticated
             .post('/api/logout')
             .end((err) => {
                 done();
@@ -320,28 +327,39 @@ describe('Create a photo', () => {
     });
 
     it('It should add a new photo to the database', (done) => {
-
-
-
+        authenticated
+            .post('/api/photos')
+            .send({
+                userId: "03df81c0-5b56-46bf-ba5f-b78607ecf86f",
+                caption: "Lunch for today <3",
+                image_path: "https://images.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg?w=940&h=650&auto=compress&cs=tinysrgb"
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('caption').eql('Lunch for today <3');
+                res.body.should.have.property('image_path');
+                done();
+            })
     })
 });
 
-describe('Get photo details', () => {
-    it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
+// describe('Get photo details', () => {
+//     it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
 
-    })
-});
+//     })
+// });
 
-describe('Update a photo', () => {
-    it('It should update the details of a photo', (done) => {
+// describe('Update a photo', () => {
+//     it('It should update the details of a photo', (done) => {
 
-    })
-});
+//     })
+// });
 
-describe('Delete a photo', () => {
-    it('It should delete a photo from the database', (done) => {
+// describe('Delete a photo', () => {
+//     it('It should delete a photo from the database', (done) => {
 
-    })
-});
+//     })
+// });
 
 

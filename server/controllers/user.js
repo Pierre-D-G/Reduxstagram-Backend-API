@@ -111,7 +111,7 @@ module.exports = {
                     return res.status(500).send(err);
                 }
                 return res.status(200).send({
-                    message: 'Login Successful'
+                    message: "Login Successful"
                 })
             });
         })(req, res);
