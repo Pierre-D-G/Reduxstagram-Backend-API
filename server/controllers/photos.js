@@ -73,5 +73,31 @@ module.exports = {
         } catch (err) {
             return res.status(500).send(err)
         }
+    },
+
+    async delete(req, res) {
+        try {
+            const photo = await Photos.find({
+                where: {
+                    photoId: req.params.photoId,
+                    userId: req.user.userId
+                }
+            });
+
+            if(!photo){
+                return res.status(404).send({
+                    message: 'Photo could not be found'
+                });
+            }
+
+            await photo.destroy();
+
+            return res.status(200).send({
+                message: "Photo has been deleted"
+            });
+
+        } catch (err) {
+            return re.status(500).send(err)
+        }
     }
 }
