@@ -32,17 +32,18 @@ npm install to install dependancies
 
 ## Tests
 
-* run `npm run test-integration` to run the integration tests which test database input/output
+* run `npm run test-unit` to run the integration tests which test database input/output
 
-* run `npm run test-unit` to run the units tests which test the API endpoints
+* run `npm run test-integration` to run the units tests which test the API endpoints
 
 ### Test Suite
 
 * Mocha v2.4.5 as test runner
 * Chai v^3.5.0 as assertion library
 * Chai-http v^2.0.1 for making Http requests to api
+* Supertest  v^3.0.0 for making Http requests to routes which require authentication
 
-### Example Unit Test
+### Example Integration Test
 
 ```shell
     let newUser = {
@@ -110,7 +111,7 @@ describe('Not register a user if email or username is in use: ', () => {
 
 ```
 
-### Example Integration Test
+### Example Unit Test
 
 ```shell
 
