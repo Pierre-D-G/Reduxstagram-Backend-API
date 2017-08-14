@@ -330,7 +330,6 @@ describe('Create a photo', () => {
         authenticated
             .post('/api/photos')
             .send({
-                userId: "03df81c0-5b56-46bf-ba5f-b78607ecf86f",
                 caption: "Lunch for today <3",
                 image_path: "https://images.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg?w=940&h=650&auto=compress&cs=tinysrgb"
             })

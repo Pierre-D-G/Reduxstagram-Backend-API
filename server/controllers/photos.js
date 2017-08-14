@@ -9,7 +9,7 @@ module.exports = {
             const photo = await Photos.create({
                 caption: req.body.caption,
                 image_path: req.body.image_path,
-                userId: req.body.userId
+                userId: req.user.userId
             });
             return res.status(200).send(photo)
 
@@ -44,6 +44,14 @@ module.exports = {
 
             return res.status(200).send(photo)
 
+        } catch (err) {
+            return res.status(500).send(err)
+        }
+    },
+
+    async update(req, res) {
+        try {
+            const photo = await Photos.update
         } catch (err) {
             return res.status(500).send(err)
         }
