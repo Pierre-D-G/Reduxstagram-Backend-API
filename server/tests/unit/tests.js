@@ -267,16 +267,17 @@ describe('Logout User: ', () => {
 });
 
 describe('Get User Data: ', () => {
-    before((done) => {
-        // Seeding database before test
-        sequelize.sync({ force: true }).then(() => {
-            require('../../seeds/users')();
-            require('../../seeds/photos')();
-            require('../../seeds/comments')();
-            done();
-        })
+    // before((done) => {
+    //     // Seeding database before test
+    //     sequelize.sync().then(() => {
+    //         require('../../seeds/users')();
+    //         require('../../seeds/photos')();
+    //         require('../../seeds/comments')();
+    //         done();
+    //     })
 
-    })
+    // });
+
     it('should get the data of a user give their user id if they are registered', (done) => {
         // Getting the details of one of seeded users by passing in their userId
         let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
@@ -291,7 +292,7 @@ describe('Get User Data: ', () => {
                 done();
             })
     })
-})
+});
 
 /**
  * PHOTOS TESTS
@@ -300,31 +301,30 @@ describe('Get User Data: ', () => {
 describe('Create a photo', () => {
     before((done) => {
         // Before test seed database then log into one of the seeded user accounts
-        sequelize.sync({ force: true }).then(() => {
-            require('../../seeds/users')();
-            require('../../seeds/photos')();
-            require('../../seeds/comments')();
-        }).then(() => {
-                authenticated
-                    .post('/api/login')
-                    .send({
-                        username: "Jenny",
-                        password: "jenny"
-                    }).end((err, res) => {
-                        console.log(res.body.message)
-                        done();
-                    })
-            })
-    });
-
-    after((done) => {
-        // After test is done, logout user
+        // sequelize.sync().then(() => {
+        //     require('../../seeds/users')();
+        //     require('../../seeds/photos')();
+        //     require('../../seeds/comments')();
+        // }).then(() => {
         authenticated
-            .post('/api/logout')
-            .end((err) => {
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
                 done();
             })
-    });
+    })
+    // });
+
+    // after((done) => {
+    //     // After test is done, logout user
+    //     authenticated
+    //         .post('/api/logout')
+    //         .end((err) => {
+    //             done();
+    //         })
+    // });
 
     it('It should add a new photo to the database', (done) => {
         authenticated
@@ -344,11 +344,32 @@ describe('Create a photo', () => {
     })
 });
 
-// describe('Get photo details', () => {
-//     it('It should get the details of a photo such as link,likes,the user who owns it etc', (done) => {
+describe('Get photo details', () => {
+    // before((done) => {
+    //     // Seeding database before test
+    //     sequelize.sync().then(() => {
+    //         require('../../seeds/users')();
+    //         require('../../seeds/photos')();
+    //         require('../../seeds/comments')();
+    //         done();
+    //     })
 
-//     })
-// });
+    // });
+
+    it('It should get the details of a photo such as comments,likes and the user who owns it', (done) => {
+        let photoId = 1;
+        chai.request('http://localhost:3000')
+            .get('/api/photos/' + photoId)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('photoId').eql(photoId);
+                res.body.should.have.property('userId');
+                res.body.should.have.property('comments');
+                done();
+            })
+    })
+});
 
 // describe('Update a photo', () => {
 //     it('It should update the details of a photo', (done) => {
