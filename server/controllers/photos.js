@@ -51,7 +51,30 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const photo = await Photos.update
+            console.log(req.params.photoId);
+            console.log(req.user.userId);
+
+            const photo = await Photos.find({
+                where: {
+                    photoId: req.params.photoId,
+                    userId: req.user.userId
+                },
+            });
+
+            if(!photo){
+                return res.status(404).send({
+                    message: 'Photo could not be found'
+                })
+            }
+
+            const updatedPhoto = await photo.update({
+                caption: req.body.caption || photo.caption,
+                image_path: req.body.image_path || photo.image_path
+            });
+
+            return res.status(200).send({
+                message: 'Your photo was successfully updated'
+            })
         } catch (err) {
             return res.status(500).send(err)
         }
