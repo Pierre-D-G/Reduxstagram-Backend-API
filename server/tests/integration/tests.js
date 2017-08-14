@@ -288,6 +288,7 @@ describe('Get User Data: ', () => {
  */
 
 describe('Create a photo', () => {
+    // Logging into one of the seeded user accounts
     before((done) => {
         authenticated
             .post('/api/login')
@@ -333,8 +334,33 @@ describe('Get photo details', () => {
 });
 
 describe('Update a photo', () => {
-    it('It should update the details of a photo', (done) => {
 
+    // Logging into one of the seeded user accounts
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
+                done();
+            })
+    });
+
+    it('It should update the details of a photo', (done) => {
+        let photoId = 18; // First photo owned by logged into test account
+        authenticated
+            .put('/api/photos/' + photoId)
+            .send({
+                caption: "This is an updated test caption"
+            }).end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.a('object');
+                res.body.should.have.property('caption');
+                res.body.should.have.property('caption').eql('This is an updated test caption');
+                res.body.should.have.property('image_path');
+                done();
+            })
     })
 });
 
