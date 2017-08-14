@@ -221,28 +221,33 @@ sign_up: DateTime, When did this user sign up?
 
 > Route Handlers
 
-    * Authentication
-        * Login
-        * Logout
+    * ~Authentication~
+        * ~Login~
+        * ~Logout~
     
     * User
-        * Get a User's Own Data - for user profile
-        * Create a User - Sign Up
-        * Get User By Id
+        * ~Get a User's Own Data - for user profile~
+        * ~Create a User - Sign Up~
+        * ~Get User By Id~
 
     * Photos
-        * Get a User's Photos
-        * Upload a Photo
+        * ~Get a Photo by id~
+        * ~Upload a Photo~
+        * Update a photo
+        * Delete a photo
 
     * Comments
         * Create a Comment
         * Get a User's Comments
         * Get a Photo's Ccomments
+        * Update a comment
+        * Delete a comment
 
     * Likes
         * Create a Like
         * Get a User's Likes
         * Get a Photo's Likes
+        * delete a like
 
 ## Licensing
 
