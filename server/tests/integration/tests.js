@@ -67,7 +67,7 @@ describe('Not register when a field is empty: ', () => {
         sequelize.sync({ force: true });
         done();
     });
-    
+
     it('it should not register a user if the username/passwords/email/names fields are empty', (done) => {
         let emptyUser = {
             username: "Redux",
@@ -500,7 +500,7 @@ describe('Unauthenticated create a comment', () => {
 });
 
 describe('Get a comment', () => {
-    it('should get a comment given its id', (done) => {
+    it('it should get a comment given its id', (done) => {
         let photoId = 3;
         let commentId = 15;
         chai.request('http://localhost:3000')

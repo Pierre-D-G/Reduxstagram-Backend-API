@@ -45,7 +45,8 @@ app.put('/api/photos/:photoId', authMiddleware, photo.update);
 app.delete('/api/photos/:photoId', authMiddleware, photo.delete);
 
 app.post('/api/photos/:photoId/comments', authMiddleware, comment.create);
-app.get('/api/photos/:photoId/comments/:commentId', comment.get)
+app.get('/api/photos/:photoId/comments/:commentId', comment.get);
+app.put('/api/photos/:photoId/comments/:commentId', authMiddleware, comment.update);
 
 app.get('*', (req, res) => {
   res.status(200).send({ message: "Welcome to the Reduxstagram API" })

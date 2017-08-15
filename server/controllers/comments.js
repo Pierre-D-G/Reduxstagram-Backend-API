@@ -21,11 +21,34 @@ module.exports = {
         }
     },
 
-    async get(req, res){
+    async get(req, res) {
         try {
             const comment = await Comments.find({
                 where: {
                     commentId: req.params.commentId,
+                }
+            });
+
+            if (!comment) {
+                return res.status(404).send({
+                    message: 'Comment could not be found'
+                })
+            }
+
+            return res.status(200).send(comment)
+
+        } catch (err) {
+            return res.status(500).send(err)
+        }
+    },
+
+    async update(req, res) {
+        try {
+            const comment = await Comments.find({
+                where: {
+                    commentId: req.params.commentId,
+                    photoId: req.params.photoId,
+                    userId: req.user.userId
                 }
             });
 
@@ -35,9 +58,15 @@ module.exports = {
                 })
             }
 
-            return res.status(200).send(comment)
+            const updatedComment = await comment.update({
+                comment: req.body.comment || comment.comment
+            });
 
-        } catch(err){
+            return res.status(200).send({
+                message: 'Your comment has been updated successfully'
+            })
+
+        } catch (err) {
             return res.status(500).send(err)
         }
     }
