@@ -438,7 +438,9 @@ describe('Unauthenticated photo delete', () => {
     })
 });
 
-// Comments
+/**
+ * Comments
+ */
 
 describe('Create a comment', () => {
     // Logging into one of the seeded user accounts
@@ -456,13 +458,32 @@ describe('Create a comment', () => {
     it('it should create a comment', (done) => {
         let photoId = 1;
         authenticated
-            .post('/api/photos/' + photoId + '/comments').send({
+            .post('/api/photos/' + photoId + '/comments')
+            .send({
                 comment: "This is a test comment",
                 photoId: "1"
             })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.have.property('message').eql('Your comment has been added successfully');
+                done();
+            })
+    })
+});
+
+describe('Unauthenticated create a comment', () => {
+    it('it should not create a comment when a user isnt logged in', (done) => {
+        let photoId = 1;
+        chai.request('http://localhost:3000')
+            .post('/api/photos/' + photoId + '/comments')
+            .send({
+                comment: "This is a test comment",
+                photoId: "1"
+            })
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('You are not authorized to perform this action.Either you are not logged in or this item doesnt belong to you');
                 done();
             })
     })
