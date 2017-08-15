@@ -25,7 +25,7 @@ module.exports = {
         try {
             const comment = await Comments.find({
                 where: {
-                    id: req.params.commentId,
+                    commentId: req.params.commentId,
                 }
             });
 

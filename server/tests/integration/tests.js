@@ -58,6 +58,16 @@ let dupeUsername = {
 // Register a user
 
 describe('Not register when a field is empty: ', () => {
+    before((done) => {
+        sequelize.sync({ force: true });
+        done();
+    });
+
+    after((done) => {
+        sequelize.sync({ force: true });
+        done();
+    });
+    
     it('it should not register a user if the username/passwords/email/names fields are empty', (done) => {
         let emptyUser = {
             username: "Redux",
@@ -271,7 +281,7 @@ describe('Get User Data: ', () => {
         // Getting the details of one of seeded users by passing in their userId
         let testId = "03df81c0-5b56-46bf-ba5f-b78607ecf86f";
         chai.request('http://localhost:3000')
-            .get('/api/user/' + testId)
+            .get(`/api/user/${testId}`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.a('object');
@@ -338,7 +348,7 @@ describe('Get photo details', () => {
     it('It should get the details of a photo such as comments,likes and the user who owns it', (done) => {
         let photoId = 1;
         chai.request('http://localhost:3000')
-            .get('/api/photos/' + photoId)
+            .get(`/api/photos/${photoId}`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.a('object');
@@ -367,7 +377,7 @@ describe('Update a photo', () => {
     it('It should update the details of a photo', (done) => {
         let photoId = 18; // First photo owned by logged into test account
         authenticated
-            .put('/api/photos/' + photoId)
+            .put(`/api/photos/${photoId}`)
             .send({
                 caption: "This is an updated test caption"
             }).end((err, res) => {
@@ -385,7 +395,7 @@ describe('Unauthenticated photo update', () => {
     it('it should not update a photo if the user doesnt own it or isnt logged in', (done) => {
         let photoId = 18;
         chai.request('http://localhost:3000')
-            .put('/api/photos/' + photoId)
+            .put(`/api/photos/${photoId}`)
             .send({
                 caption: 'This photo should not be update because i am not logged in or dont own it'
             })
@@ -414,7 +424,7 @@ describe('Delete a photo', () => {
     it('It should delete a photo from the database', (done) => {
         let photoId = 18;
         authenticated
-            .delete('/api/photos/' + photoId)
+            .delete(`/api/photos/${photoId}`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.a('object');
@@ -428,7 +438,7 @@ describe('Unauthenticated photo delete', () => {
     it('it should not delete a photo if the user doesnt own it or isnt logged in', (done) => {
         let photoId = 18;
         chai.request('http://localhost:3000')
-            .delete('/api/photos/' + photoId)
+            .delete(`/api/photos/${photoId}`)
             .end((err, res) => {
                 res.should.have.status(403);
                 res.body.should.have.property('message');
@@ -458,7 +468,7 @@ describe('Create a comment', () => {
     it('it should create a comment', (done) => {
         let photoId = 1;
         authenticated
-            .post('/api/photos/' + photoId + '/comments')
+            .post(`/api/photos/${photoId}/comments`)
             .send({
                 comment: "This is a test comment",
                 photoId: "1"
@@ -475,7 +485,7 @@ describe('Unauthenticated create a comment', () => {
     it('it should not create a comment when a user isnt logged in', (done) => {
         let photoId = 1;
         chai.request('http://localhost:3000')
-            .post('/api/photos/' + photoId + '/comments')
+            .post(`/api/photos/${photoId}/comments`)
             .send({
                 comment: "This is a test comment",
                 photoId: "1"
@@ -488,6 +498,21 @@ describe('Unauthenticated create a comment', () => {
             })
     })
 });
+
+describe('Get a comment', () => {
+    it('should get a comment given its id', (done) => {
+        let photoId = 3;
+        let commentId = 15;
+        chai.request('http://localhost:3000')
+        .get(`/api/photos/${photoId}/comments/${commentId}`)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property('photoId').eql(photoId);
+            res.body.should.have.property('commentId').eql(commentId)
+            done();
+        })
+    })
+})
 
 describe('Update a comment', () => {
     it('it should update an edited comment', (done) => {
