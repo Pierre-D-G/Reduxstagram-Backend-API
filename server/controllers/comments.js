@@ -19,5 +19,26 @@ module.exports = {
         } catch (err) {
             res.status(500).send(err)
         }
+    },
+
+    async get(req, res){
+        try {
+            const comment = await Comments.find({
+                where: {
+                    id: req.params.commentId,
+                }
+            });
+
+            if(!comment){
+                return res.status(404).send({
+                    message: 'Comment could not be found'
+                })
+            }
+
+            return res.status(200).send(comment)
+
+        } catch(err){
+            return res.status(500).send(err)
+        }
     }
 }
