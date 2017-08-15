@@ -441,8 +441,30 @@ describe('Unauthenticated photo delete', () => {
 // Comments
 
 describe('Create a comment', () => {
+    // Logging into one of the seeded user accounts
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
+                done();
+            })
+    });
+
     it('it should create a comment', (done) => {
-        done();
+        let photoId = 1;
+        authenticated
+            .post('/api/photos/' + photoId + '/comments').send({
+                comment: "This is a test comment",
+                photoId: "1"
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message').eql('Your comment has been added successfully');
+                done();
+            })
     })
 });
 
