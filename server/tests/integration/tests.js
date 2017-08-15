@@ -317,6 +317,23 @@ describe('Create a photo', () => {
     })
 });
 
+describe('Unauthenticated create a photo', () => {
+    it('It should add a new photo to the database', (done) => {
+        chai.request('http://localhost:3000')
+            .post('/api/photos')
+            .send({
+                caption: "Lunch for today <3",
+                image_path: "https://images.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg?w=940&h=650&auto=compress&cs=tinysrgb"
+            })
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('You are not authorized to perform this action.Either you are not logged in or this item doesnt belong to you');
+                done();
+            })
+    })
+});
+
 describe('Get photo details', () => {
     it('It should get the details of a photo such as comments,likes and the user who owns it', (done) => {
         let photoId = 1;
@@ -364,6 +381,24 @@ describe('Update a photo', () => {
     })
 });
 
+describe('Unauthenticated photo update', () => {
+    it('it should not update a photo if the user doesnt own it or isnt logged in', (done) => {
+        let photoId = 18;
+        chai.request('http://localhost:3000')
+            .put('/api/photos/' + photoId)
+            .send({
+                caption: 'This photo should not be update because i am not logged in or dont own it'
+            })
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('You are not authorized to perform this action.Either you are not logged in or this item doesnt belong to you');
+                done();
+            })
+    })
+});
+
+
 describe('Delete a photo', () => {
     // Logging into one of the seeded user accounts
     before((done) => {
@@ -386,6 +421,40 @@ describe('Delete a photo', () => {
                 res.body.should.have.property('message').eql('Photo has been deleted');
                 done();
             })
+    })
+});
+
+describe('Unauthenticated photo delete', () => {
+    it('it should not delete a photo if the user doesnt own it or isnt logged in', (done) => {
+        let photoId = 18;
+        chai.request('http://localhost:3000')
+            .delete('/api/photos/' + photoId)
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('You are not authorized to perform this action.Either you are not logged in or this item doesnt belong to you');
+                done();
+            })
+    })
+});
+
+// Comments
+
+describe('Create a comment', () => {
+    it('it should create a comment', (done) => {
+        done();
+    })
+});
+
+describe('Update a comment', () => {
+    it('it should update an edited comment', (done) => {
+        done();
+    })
+});
+
+describe('Delete a comment', () => {
+    it('it should delete a requested comment', (done) => {
+        done();
     })
 });
 
