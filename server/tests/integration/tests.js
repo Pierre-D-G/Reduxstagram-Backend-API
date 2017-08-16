@@ -515,8 +515,32 @@ describe('Get a comment', () => {
 })
 
 describe('Update a comment', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
+                done();
+            })
+    });
+
     it('it should update an edited comment', (done) => {
-        done();
+        let photoId = 3;
+        let commentId = 16;
+
+        authenticated
+            .put(`/api/photos/${photoId}/comments/${commentId}`)
+            .send({
+                comment: 'This comment has been updated'
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('Your comment has been updated successfully');
+                done();
+            })
     })
 });
 
