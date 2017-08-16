@@ -544,6 +544,36 @@ describe('Update a comment', () => {
     })
 });
 
+describe('Unauthenticated update a comment', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Infinitiman",
+                password: "infinity"
+            }).end((err, res) => {
+                done();
+            })
+    });
+
+    it('it should update an edited comment', (done) => {
+        let photoId = 3;
+        let commentId = 16;
+
+        authenticated
+            .put(`/api/photos/${photoId}/comments/${commentId}`)
+            .send({
+                comment: 'This comment has been updated'
+            })
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('Comment could not be found');
+                done();
+            })
+    })
+});
+
 describe('Delete a comment', () => {
     it('it should delete a requested comment', (done) => {
         done();
