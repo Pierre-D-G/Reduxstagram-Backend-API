@@ -217,30 +217,30 @@ sign_up: DateTime, When did this user sign up?
 > Tests
 
     * To be created for each route handler
-    * To be created for database Input/Output
+    * ~~To be created for database Input/Output~~
 
 > Route Handlers
 
-    * ~Authentication~
-        * ~Login~
-        * ~Logout~
+    * ~~Authentication~~
+        * ~~Login~~
+        * ~~Logout~~
     
     * User
-        * ~Get a User's Own Data - for user profile~
-        * ~Create a User - Sign Up~
-        * ~Get User By Id~
+        * ~~Get a User's Own Data - for user profile~~
+        * ~~Create a User - Sign Up~~
+        * ~~Get User By Id~~
 
     * Photos
-        * ~Get a Photo by id~
-        * ~Upload a Photo~
-        * ~Update a photo~
-        * ~Delete a photo~
+        * ~~Get a Photo by id~~
+        * ~~Upload a Photo~~
+        * ~~Update a photo~~
+        * ~~Delete a photo~~
 
     * Comments
-        * ~Create a Comment~
-        * ~Get a specific Comment~
-        * ~Update a Comment~
-        * ~Delete a Comment~
+        * ~~Create a Comment~~
+        * ~~Get a specific Comment~~
+        * ~~Update a Comment~~
+        * ~~Delete a Comment~~
 
     * Likes
         * Create a Like
