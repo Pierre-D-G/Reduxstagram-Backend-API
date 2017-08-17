@@ -556,7 +556,7 @@ describe('Unauthenticated update a comment', () => {
             })
     });
 
-    it('it should update an edited comment', (done) => {
+    it('it should not update an edited comment because this user doesnt own it', (done) => {
         let photoId = 3;
         let commentId = 16;
 
@@ -599,6 +599,33 @@ describe('Delete a comment', () => {
                 done();
             })
     });
+});
+
+describe('Unauthenticated delete a comment', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Infinitiman",
+                password: "infinity"
+            }).end((err, res) => {
+                done();
+            })
+    });
+
+    it('it should not delete a comment because this user does own it', (done) => {
+        let photoId = 3;
+        let commentId = 16;
+
+        authenticated
+            .delete(`/api/photos/${photoId}/comments/${commentId}`)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('Comment could not be found');
+                done();
+            })
+    })
 });
 
 
