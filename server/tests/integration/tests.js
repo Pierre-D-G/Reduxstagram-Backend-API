@@ -575,9 +575,30 @@ describe('Unauthenticated update a comment', () => {
 });
 
 describe('Delete a comment', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Jenny",
+                password: "jenny"
+            }).end((err, res) => {
+                done();
+            })
+    });
+    
     it('it should delete a requested comment', (done) => {
-        done();
-    })
+        let photoId = 3;
+        let commentId = 16;
+
+        authenticated
+            .delete(`/api/photos/${photoId}/comments/${commentId}`)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message');
+                res.body.message.should.eql('Comment has been deleted');
+                done();
+            })
+    });
 });
 
 
