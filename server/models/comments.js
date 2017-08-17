@@ -3,6 +3,11 @@
 
 module.exports = function(sequelize, DataTypes){
     const Comments = sequelize.define('comments', {
+        commentId: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
         comment: {
             type: DataTypes.TEXT,
             allowNull: false
