@@ -233,21 +233,19 @@ sign_up: DateTime, When did this user sign up?
     * Photos
         * ~Get a Photo by id~
         * ~Upload a Photo~
-        * Update a photo
-        * Delete a photo
+        * ~Update a photo~
+        * ~Delete a photo~
 
     * Comments
-        * Create a Comment
-        * Get a User's Comments
-        * Get a Photo's Ccomments
-        * Update a comment
-        * Delete a comment
+        * ~Create a Comment~
+        * ~Get a specific Comment~
+        * ~Update a Comment~
+        * ~Delete a Comment~
 
     * Likes
         * Create a Like
-        * Get a User's Likes
         * Get a Photo's Likes
-        * delete a like
+        * delete a Like
 
 ## Licensing
 
