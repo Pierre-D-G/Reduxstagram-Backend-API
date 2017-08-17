@@ -52,7 +52,7 @@ module.exports = {
                 }
             });
 
-            if(!comment){
+            if (!comment) {
                 return res.status(404).send({
                     message: 'Comment could not be found'
                 })
@@ -69,5 +69,33 @@ module.exports = {
         } catch (err) {
             return res.status(500).send(err)
         }
+    },
+
+    async delete(req, res) {
+        try {
+            const comment = await Comments.find({
+                where: {
+                    commentId: req.params.commentId,
+                    photoId: req.params.photoId,
+                    userId: req.user.userId
+                }
+            });
+
+            if(!comment){
+                return res.status(404).send({
+                    message: 'Comment could not be found'
+                });
+            };
+
+            await comment.destroy();
+
+            return res.status(200).send({
+                message: 'Comment has been deleted'
+            })
+
+        } catch (err) {
+            return res.status(500).send(err)
+        }
+
     }
 }
