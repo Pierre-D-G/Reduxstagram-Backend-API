@@ -25,24 +25,51 @@ module.exports = {
                     {
                         model: Comments,
                         as: 'comments',
+                        attributes: {
+                            exclude: ['userId', 'createdAt', 'updatedAt'],
+                        },
                         include: [
                             {
                                 model: User,
                                 attributes: {
-                                    exclude: ['userId', 'first_name', 'last_name', 'email', 'bio', 'sign_up', 'password', 'bio']
+                                    exclude: ['userId', 'first_name', 'last_name', 'email', 'bio', 'sign_up', 'password', 'bio', 'createdAt', 'updatedAt']
+                                }
+                            }
+                        ]
+                    },{
+                        model: Likes,
+                        as: 'likes',
+                        attributes: {
+                            exclude: ['userId', 'createdAt', 'updatedAt'],
+                        },
+                        include: [
+                            {
+                                model: User,
+                                attributes: {
+                                    exclude: ['userId', 'first_name', 'last_name', 'email', 'bio', 'sign_up', 'password', 'bio', 'createdAt', 'updatedAt']
                                 }
                             }
                         ]
                     }
                 ]
             });
+
+            const Like = await Likes.count({
+                where: {
+                    photoId: req.params.photoId
+                }
+            });
+
             if (!photo) {
                 return res.status(404).send({
                     message: 'Photo could not be found'
                 })
             }
 
-            return res.status(200).send(photo)
+            const Photo = photo.toJSON();
+            Photo.likes_count = Like;
+
+            return res.status(200).send(Photo)
 
         } catch (err) {
             return res.status(500).send(err)
@@ -97,7 +124,7 @@ module.exports = {
             });
 
         } catch (err) {
-            return re.status(500).send(err)
+            return res.status(500).send(err)
         }
     }
-}
+};
