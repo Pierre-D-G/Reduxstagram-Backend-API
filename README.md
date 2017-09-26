@@ -1,7 +1,7 @@
-# Reduxtagram API
-> Instagram API clone
+# Reduxstagram API
+> Reduxstagram Backend API for Wesbro' Learn Redux course
 
-An API created to clone a portion of Instagram's backend.
+An API created for Wesbos' [Learn Redux][https://learnredux.com/] to simulate a real backend api to retrieve data from instead of json files.
 
 ## Developing
 
@@ -12,7 +12,7 @@ An API created to clone a portion of Instagram's backend.
 * Express v4.15.3
 * PostgreSQL v9.6
 * Sequelize v4.2.1 as ORM
-* Following test-driven development
+* A test driven development approach
 
 ### Prerequisites
 
@@ -23,12 +23,28 @@ An API created to clone a portion of Instagram's backend.
 
 ### Setting up Dev
 
+1. Download or clone the repository
+
 ```shell
-Download or clone the repostisory
 git clone https://github.com/Pierre-D-G/Reduxstagram-API.git
-cd Reduxtagram API/
-npm install to install dependancies
 ```
+
+2. cd to Reduxtagram API/ or navigate to the root of the repository
+
+3. Create a database in PostgreSQL with the name of your choosing
+
+4. Create a .env file in the root directory of the repository with the format:
+
+```shell
+DB= <the name of the database you created>
+DB_HOST=localhost
+DB_USER= <Username of the owner of the database>
+DB_PASS= <Password of the owner of the database>
+SESSION_SECRET=reduxtagram
+```
+5. Run `npm install` to install dependancies
+
+6. Run `npm start` to start the server
 
 ## Tests
 
@@ -244,7 +260,7 @@ sign_up: DateTime, When did this user sign up?
 
     * Likes
         * Create a Like
-        * Get a Photo's Likes
+        * ~~Get a Photo's Likes~~
         * delete a Like
 
 ## Licensing
