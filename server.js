@@ -22,6 +22,7 @@ require('./server/auth')(app, passport);
 const user = require('./server/controllers/user');
 const photo = require('./server/controllers/photos');
 const comment = require('./server/controllers/comments');
+const like = require('./server/controllers/likes');
 
 const authMiddleware = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -48,6 +49,8 @@ app.post('/api/photos/:photoId/comments', authMiddleware, comment.create);
 app.get('/api/photos/:photoId/comments/:commentId', comment.get);
 app.put('/api/photos/:photoId/comments/:commentId', authMiddleware, comment.update);
 app.delete('/api/photos/:photoId/comments/:commentId', authMiddleware, comment.delete);
+
+app.post('/api/photos/:photoId', authMiddleware, like.create);
 
 app.get('*', (req, res) => {
   res.status(200).send({ message: "Welcome to the Reduxstagram API" })

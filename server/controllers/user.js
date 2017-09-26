@@ -47,7 +47,7 @@ module.exports = {
                 where: {
                     email: email
                 },
-            })
+            });
 
             if (emailVerify) {
                 return res.status(500).send({
@@ -59,7 +59,7 @@ module.exports = {
                 where: {
                     username: username
                 },
-            })
+            });
 
             if (usernameVerify) {
                 return res.status(500).send({
