@@ -54,6 +54,8 @@ let dupeUsername = {
     bio: "testing"
 }
 
+/** @namespace should.have **/
+/** @namespace should.be **/
 
 // Register a user
 
@@ -78,6 +80,7 @@ describe('Not register when a field is empty: ', () => {
             last_name: '',
             bio: "testing"
         }
+
         chai.request('http://localhost:3000')
             .post('/api/register')
             .send(emptyUser)
@@ -556,7 +559,7 @@ describe('Unauthenticated update a comment', () => {
             })
     });
 
-    it('it should not update an edited comment because this user doesnt own it', (done) => {
+    it('it should not update an edited comment because this user does not own it', (done) => {
         let photoId = 3;
         let commentId = 16;
 
@@ -581,7 +584,7 @@ describe('Delete a comment', () => {
             .send({
                 username: "Jenny",
                 password: "jenny"
-            }).end((err, res) => {
+            }).end(() => {
                 done();
             })
     });
@@ -608,12 +611,12 @@ describe('Unauthenticated delete a comment', () => {
             .send({
                 username: "Infinitiman",
                 password: "infinity"
-            }).end((err, res) => {
+            }).end(() => {
                 done();
             })
     });
 
-    it('it should not delete a comment because this user does own it', (done) => {
+    it('it should not delete a comment because this user does not own it', (done) => {
         let photoId = 3;
         let commentId = 16;
 
@@ -628,4 +631,92 @@ describe('Unauthenticated delete a comment', () => {
     })
 });
 
+/**?
+ * Likes
+ */
 
+describe('Insert a like', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Infinitiman",
+                password: "infinity"
+            }).end(() => {
+            done();
+        })
+    });
+
+    it('It should insert a like for the correct photo when a user likes it', (done) => {
+        let photoId = 4;
+
+        authenticated.
+            post(`/api/photos/${photoId}`)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+});
+
+describe('Do not insert a like if user already liked current photo', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Infinitiman",
+                password: "infinity"
+            }).end(() => {
+            let photoId = 4;
+
+            authenticated.
+            post(`/api/photos/${photoId}`)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    done()
+                })
+        })
+    });
+
+    it('It should not insert a like when the user has already liked the photo', (done)=> {
+        let photoId = 4;
+
+        authenticated.
+        post(`/api/photos/${photoId}`)
+            .end((err, res) => {
+                res.should.have.status(403)
+                done()
+            })
+    })
+});
+
+describe('Delete a like', () => {
+    before((done) => {
+        authenticated
+            .post('/api/login')
+            .send({
+                username: "Infinitiman",
+                password: "infinity"
+            }).end(() => {
+            let photoId = 4;
+
+            authenticated.
+            post(`/api/photos/${photoId}`)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    done()
+                })
+        })
+    });
+
+    it('It should delete a like when the user who liked the photo decides to unlike it', (done) => {
+        let photoId = 4;
+
+        authenticated.
+        delete(`/api/photos/${photoId}/likes`)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+});
