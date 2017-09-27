@@ -51,9 +51,10 @@ app.put('/api/photos/:photoId/comments/:commentId', authMiddleware, comment.upda
 app.delete('/api/photos/:photoId/comments/:commentId', authMiddleware, comment.delete);
 
 app.post('/api/photos/:photoId', authMiddleware, like.create);
+app.delete('/api/photos/:photoId/likes', authMiddleware, like.delete);
 
 app.get('*', (req, res) => {
   res.status(200).send({ message: "Welcome to the Reduxstagram API" })
 });
 
-module.exports = app 
+module.exports = app;
